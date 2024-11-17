@@ -1,5 +1,5 @@
 import type { HttpHandlerFn, HttpRequest } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, untracked } from '@angular/core';
 import { AuthStore } from './auth.store';
 
 let authService: AuthStore | undefined;
@@ -9,7 +9,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
     authService = inject(AuthStore);
   }
 
-  const authToken = authService.getToken();
+  const authToken = untracked(authService.$token);
   if (!authToken) {
     return next(req);
   }
