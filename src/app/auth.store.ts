@@ -1,9 +1,10 @@
-import { afterNextRender, computed, inject, Injectable, Injector, signal, untracked } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { computed, inject, Injectable, PLATFORM_ID, signal, untracked } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
-  private readonly injector = inject(Injector);
   private readonly $token = signal<string | undefined>(undefined);
+  private readonly platform = inject(PLATFORM_ID);
 
   public readonly $userId = computed(() => {
     const token = this.$token();
@@ -14,21 +15,13 @@ export class AuthStore {
   });
 
   constructor() {
-    this.whenReady(() => this.$token.set('12121212'));
+    if (isPlatformBrowser(this.platform)) {
+      this.$token.set('12121212');
+    }
   }
 
   getToken() {
     return untracked(this.$token);
-  }
-
-  whenReady(cb: Function) {
-    if (typeof window !== 'undefined') {
-      cb();
-    } else {
-      afterNextRender(() => {
-        cb();
-      }, { injector: this.injector });
-    }
   }
 }
 
