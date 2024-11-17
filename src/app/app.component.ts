@@ -25,6 +25,7 @@ export class AppComponent {
   public readonly $isAuthenticated = this.authStore.$token;
 
   constructor() {
-    this.http.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/1').subscribe();
+    // if this request fails, we get a deadlock.
+    this.http.get('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + Math.floor(Math.random() * 1000)).subscribe();
   }
 }

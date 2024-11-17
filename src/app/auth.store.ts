@@ -9,7 +9,7 @@ export class AuthStore {
 
   constructor() {
     if (isPlatformBrowser(this.platform)) {
-      this.$token.set('12121212');
+      this.$token.set('Schrödinger');
     }
   }
 }
